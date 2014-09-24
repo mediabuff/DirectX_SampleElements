@@ -16,6 +16,7 @@ namespace SampleElements
 	private:
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;
-		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_blueBrush;
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_pBlueBrush;
+		Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> m_pLinearGradientBrush;
 	};
 }
