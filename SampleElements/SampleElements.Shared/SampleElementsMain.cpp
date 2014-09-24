@@ -20,6 +20,8 @@ SampleElementsMain::SampleElementsMain(const std::shared_ptr<DX::DeviceResources
 
 	m_fpsTextRenderer = std::unique_ptr<SampleFpsTextRenderer>(new SampleFpsTextRenderer(m_deviceResources));
 
+	m_2dSceneRenderer = std::unique_ptr<Sample2DSceneRenderer>(new Sample2DSceneRenderer(m_deviceResources));
+
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 	/*
@@ -39,6 +41,7 @@ void SampleElementsMain::CreateWindowSizeDependentResources()
 {
 	// TODO: Replace this with the size-dependent initialization of your app's content.
 	m_sceneRenderer->CreateWindowSizeDependentResources();
+	m_2dSceneRenderer->CreateDeviceDependentResources();
 }
 
 // Updates the application state once per frame.
@@ -50,6 +53,7 @@ void SampleElementsMain::Update()
 		// TODO: Replace this with your app's content update functions.
 		m_sceneRenderer->Update(m_timer);
 		m_fpsTextRenderer->Update(m_timer);
+		m_2dSceneRenderer->Update(m_timer);
 	});
 }
 
@@ -81,6 +85,7 @@ bool SampleElementsMain::Render()
 	// TODO: Replace this with your app's content rendering functions.
 	m_sceneRenderer->Render();
 	m_fpsTextRenderer->Render();
+	m_2dSceneRenderer->Render();
 
 	return true;
 }
@@ -90,6 +95,7 @@ void SampleElementsMain::OnDeviceLost()
 {
 	m_sceneRenderer->ReleaseDeviceDependentResources();
 	m_fpsTextRenderer->ReleaseDeviceDependentResources();
+	m_2dSceneRenderer->ReleaseDeviceDependentResources();
 }
 
 // Notifies renderers that device resources may now be recreated.
@@ -97,5 +103,6 @@ void SampleElementsMain::OnDeviceRestored()
 {
 	m_sceneRenderer->CreateDeviceDependentResources();
 	m_fpsTextRenderer->CreateDeviceDependentResources();
+	m_2dSceneRenderer->CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
 }

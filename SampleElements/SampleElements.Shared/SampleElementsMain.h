@@ -4,6 +4,7 @@
 #include "Common\DeviceResources.h"
 #include "Content\Sample3DSceneRenderer.h"
 #include "Content\SampleFpsTextRenderer.h"
+#include "Content\Sample2DSceneRenderer.h"
 
 // Renders Direct2D and 3D content on the screen.
 namespace SampleElements
@@ -28,6 +29,7 @@ namespace SampleElements
 		// TODO: Replace with your own content renderers.
 		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
 		std::unique_ptr<SampleFpsTextRenderer> m_fpsTextRenderer;
+		std::unique_ptr<Sample2DSceneRenderer> m_2dSceneRenderer;
 
 		// Rendering loop timer.
 		DX::StepTimer m_timer;
