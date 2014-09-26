@@ -19,7 +19,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\SampleFpsTextRenderer.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)resource.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h">
+      <Filter>Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)app.cpp" />
@@ -34,7 +37,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Content\SampleFpsTextRenderer.cpp">
       <Filter>Content</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="$(MSBuildThisFileDirectory)Content\SamplePixelShader.hlsl">
@@ -51,5 +56,16 @@
     <Filter Include="Content">
       <UniqueIdentifier>{7b0b89ba-4ca2-479f-b1b0-fec3f1949a14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Images">
+      <UniqueIdentifier>{25e93af8-4bfe-413d-8c56-adf9bf4d782a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="$(MSBuildThisFileDirectory)Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="$(MSBuildThisFileDirectory)Images\drop.png">
+      <Filter>Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>
