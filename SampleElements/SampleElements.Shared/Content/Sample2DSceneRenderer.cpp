@@ -44,7 +44,7 @@ void Sample2DSceneRenderer::Render()
 
 	context->DrawBitmap(
 		m_pBitmap.Get(),
-		D2D1::RectF(200.0f, padding, m_bitmapSize.width+200.0f, m_bitmapSize.height+padding)
+		D2D1::RectF(200.0f, padding, m_bitmapSize.width + 200.0f, m_bitmapSize.height + padding)
 		);
 
 	context->DrawRectangle(
@@ -54,12 +54,12 @@ void Sample2DSceneRenderer::Render()
 		m_stroke
 		);
 
-		context->FillRectangle(
+	context->FillRectangle(
 		D2D1::RectF(600.0f, 400.0f, 900.0f, 700.0f),
 		m_pLinearGradientBrush.Get()
 		);
 
-		context->DrawLine(
+	context->DrawLine(
 		D2D1::Point2F(200, 300),
 		D2D1::Point2F(800, 500),
 		m_pBlueBrush.Get(),
