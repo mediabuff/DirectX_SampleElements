@@ -19,9 +19,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\SampleFpsTextRenderer.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)resource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h">
       <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\PointerHelper.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +61,6 @@
     <Filter Include="Images">
       <UniqueIdentifier>{25e93af8-4bfe-413d-8c56-adf9bf4d782a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="$(MSBuildThisFileDirectory)Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="$(MSBuildThisFileDirectory)Images\drop.png">

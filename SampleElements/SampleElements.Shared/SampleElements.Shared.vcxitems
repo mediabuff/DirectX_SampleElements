@@ -18,7 +18,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)app.h" />
     <ClCompile Include="$(MSBuildThisFileDirectory)app.cpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)resource.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\PointerHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SampleElementsMain.h" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SampleElementsMain.cpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -44,9 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectCapability Include="SourceItemsFromImports" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="$(MSBuildThisFileDirectory)Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="$(MSBuildThisFileDirectory)Images\drop.png" />

@@ -1,45 +1,10 @@
-
 #include "pch.h"
 #include "Sample2DSceneRenderer.h"
 
 #include "Common/DirectXHelper.h"
-
-#ifndef HINST_THISCOMPONENT
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-#define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
-#endif
+#include "Common/PointerHelper.h"
 
 using namespace SampleElements;
-
-template<class Interface>
-inline void SafeRelease(
-	Interface **ppInterfaceToRelease
-	)
-{
-	if (*ppInterfaceToRelease != NULL)
-	{
-		(*ppInterfaceToRelease)->Release();
-
-		(*ppInterfaceToRelease) = NULL;
-	}
-}
-
-
-#ifndef Assert
-#if defined( DEBUG ) || defined( _DEBUG )
-#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
-#else
-#define Assert(b)
-#endif //DEBUG || _DEBUG
-#endif
-
-
-
-#ifndef HINST_THISCOMPONENT
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-#define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
-#endif
-
 
 Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) : m_deviceResources(deviceResources)
 {
@@ -48,7 +13,7 @@ Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 
 void Sample2DSceneRenderer::Update(DX::StepTimer const& timer)
 {
-
+	padding += 1.0f;
 }
 
 void Sample2DSceneRenderer::Render()
@@ -73,9 +38,16 @@ void Sample2DSceneRenderer::Render()
 		);
 
 	context->BeginDraw();
-	context->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
+	//context->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
 
-	/*context->DrawRectangle(
+	auto m_bitmapSize = m_pBitmap->GetSize();
+
+	context->DrawBitmap(
+		m_pBitmap.Get(),
+		D2D1::RectF(200.0f, padding, m_bitmapSize.width+200.0f, m_bitmapSize.height+padding)
+		);
+
+	context->DrawRectangle(
 		D2D1::RectF(100.0f, 100.0f, 500.0f, 500.0f),
 		m_pBlueBrush.Get(),
 		4.0f,
@@ -93,7 +65,7 @@ void Sample2DSceneRenderer::Render()
 		m_pBlueBrush.Get(),
 		10.0f,
 		m_stroke
-		);*/
+		);
 
 	DX::ThrowIfFailed(
 		context->EndDraw()
@@ -133,6 +105,12 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 		&m_pLinearGradientBrush
 		)
 		);
+
+	DX::ThrowIfFailed(
+		LoadBitmapFromFile(L"Images/drop.png", &m_pBitmap)
+		);
+
+	padding = 0;
 }
 
 void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
@@ -140,130 +118,75 @@ void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
 	m_pBlueBrush.Reset();
 }
 
-
-HRESULT Sample2DSceneRenderer::LoadResourceBitmap(
-	ID2D1RenderTarget *pRenderTarget, IWICImagingFactory *pIWICFactory, PCTSTR resourceName,
-	PCTSTR resourceType, UINT destinationWidth, UINT destinationHeight, ID2D1Bitmap **ppBitmap)
+HRESULT Sample2DSceneRenderer::LoadBitmapFromFile(PCWSTR uri, ID2D1Bitmap **ppBitmap)
 {
-	IWICBitmapDecoder *pDecoder = NULL;
-	IWICBitmapFrameDecode *pSource = NULL;
-	IWICStream *pStream = NULL;
-	IWICFormatConverter *pConverter = NULL;
-	IWICBitmapScaler *pScaler = NULL;
+	HRESULT hr;
+	auto context = m_deviceResources->GetD2DDeviceContext();
+	auto m_wicFactory = m_deviceResources->GetWicImagingFactory();
+	Microsoft::WRL::ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
 
-	HRSRC imageResHandle = NULL;
-	HGLOBAL imageResDataHandle = NULL;
-	void *pImageFile = NULL;
-	DWORD imageFileSize = 0;
+	hr = m_wicFactory->CreateDecoderFromFilename(
+		uri,
+		nullptr,
+		GENERIC_READ,
+		WICDecodeMetadataCacheOnDemand,
+		&wicBitmapDecoder
+		);
 
-	// Locate the resource.
-	imageResHandle = FindResourceW(HINST_THISCOMPONENT, resourceName, resourceType);
-	HRESULT hr = imageResHandle ? S_OK : E_FAIL;
+	Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
 	if (SUCCEEDED(hr))
 	{
-		// Load the resource.
-		imageResDataHandle = LoadResource(HINST_THISCOMPONENT, imageResHandle);
-
-		hr = imageResDataHandle ? S_OK : E_FAIL;
+		hr = wicBitmapDecoder->GetFrame(0, &wicBitmapFrame);
 	}
 
 
+	Microsoft::WRL::ComPtr<IWICFormatConverter> wicFormatConverter;
 
 	if (SUCCEEDED(hr))
 	{
-		// Lock it to get a system memory pointer.
-		pImageFile = LockResource(imageResDataHandle);
-
-		hr = pImageFile ? S_OK : E_FAIL;
-	}
-	if (SUCCEEDED(hr))
-	{
-		// Calculate the size.
-		imageFileSize = SizeofResource(HINST_THISCOMPONENT, imageResHandle);
-
-		hr = imageFileSize ? S_OK : E_FAIL;
-
+		hr = m_wicFactory->CreateFormatConverter(&wicFormatConverter);
 	}
 
-
 	if (SUCCEEDED(hr))
 	{
-		// Create a WIC stream to map onto the memory.
-		hr = pIWICFactory->CreateStream(&pStream);
-	}
-	if (SUCCEEDED(hr))
-	{
-		// Initialize the stream with the memory pointer and size.
-		hr = pStream->InitializeFromMemory(
-			reinterpret_cast<BYTE*>(pImageFile),
-			imageFileSize
-			);
-	}
-
-
-	if (SUCCEEDED(hr))
-	{
-		// Create a decoder for the stream.
-		hr = pIWICFactory->CreateDecoderFromStream(
-			pStream,
-			NULL,
-			WICDecodeMetadataCacheOnLoad,
-			&pDecoder
-			);
-	}
-
-
-	if (SUCCEEDED(hr))
-	{
-		// Create the initial frame.
-		hr = pDecoder->GetFrame(0, &pSource);
-	}
-
-
-	if (SUCCEEDED(hr))
-	{
-		// Convert the image format to 32bppPBGRA
-		// (DXGI_FORMAT_B8G8R8A8_UNORM + D2D1_ALPHA_MODE_PREMULTIPLIED).
-		hr = pIWICFactory->CreateFormatConverter(&pConverter);
-	}
-
-
-
-	if (SUCCEEDED(hr))
-	{
-
-
-
-		hr = pConverter->Initialize(
-			pSource,
+		hr = wicFormatConverter->Initialize(
+			wicBitmapFrame.Get(),
 			GUID_WICPixelFormat32bppPBGRA,
 			WICBitmapDitherTypeNone,
-			NULL,
-			0.f,
-			WICBitmapPaletteTypeMedianCut
+			nullptr,
+			0.0,
+			WICBitmapPaletteTypeCustom  // the BGRA format has no palette so this value is ignored
 			);
-
-
-
 	}
 
+	double dpiX = 96.0f;
+	double dpiY = 96.0f;
+	if (SUCCEEDED(hr))
+	{
+		hr = wicFormatConverter->GetResolution(&dpiX, &dpiY);
+	}
 
 	if (SUCCEEDED(hr))
 	{
-		//create a Direct2D bitmap from the WIC bitmap.
-		hr = pRenderTarget->CreateBitmapFromWicBitmap(
-			pConverter,
-			NULL,
-			ppBitmap
+		hr = context->CreateBitmapFromWicBitmap(
+			wicFormatConverter.Get(),
+			D2D1::BitmapProperties(
+			D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+			static_cast<float>(dpiX),
+			static_cast<float>(dpiY)
+			),
+			&m_pBitmap
 			);
-
 	}
+	return hr;
+}
 
-	SafeRelease(&pDecoder);
-	SafeRelease(&pSource);
-	SafeRelease(&pStream);
-	SafeRelease(&pConverter);
-	SafeRelease(&pScaler);
+HRESULT Sample2DSceneRenderer::CreateBitmapBrush(PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush)
+{
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> ppBitmap;
 
+	auto hr = LoadBitmapFromFile(uri, &ppBitmap);
+	auto context = m_deviceResources->GetD2DDeviceContext();
+	hr = context->CreateBitmapBrush(ppBitmap.Get(), &m_pBitmapBrush);
 	return hr;
 }
