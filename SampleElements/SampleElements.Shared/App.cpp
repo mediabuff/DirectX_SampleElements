@@ -30,8 +30,8 @@ IFrameworkView^ Direct3DApplicationSource::CreateView()
 }
 
 App::App() :
-	m_windowClosed(false),
-	m_windowVisible(true)
+m_windowClosed(false),
+m_windowVisible(true)
 {
 }
 
@@ -60,7 +60,7 @@ void App::SetWindow(CoreWindow^ window)
 	window->VisibilityChanged +=
 		ref new TypedEventHandler<CoreWindow^, VisibilityChangedEventArgs^>(this, &App::OnVisibilityChanged);
 
-	window->Closed += 
+	window->Closed +=
 		ref new TypedEventHandler<CoreWindow^, CoreWindowEventArgs^>(this, &App::OnWindowClosed);
 
 	DisplayInformation^ currentDisplayInformation = DisplayInformation::GetForCurrentView();
@@ -81,9 +81,19 @@ void App::SetWindow(CoreWindow^ window)
 	// Disable all pointer visual feedback for better performance when touching.
 	// This is not supported on Windows Phone applications.
 	auto pointerVisualizationSettings = PointerVisualizationSettings::GetForCurrentView();
-	pointerVisualizationSettings->IsContactFeedbackEnabled = false; 
+	pointerVisualizationSettings->IsContactFeedbackEnabled = false;
 	pointerVisualizationSettings->IsBarrelButtonFeedbackEnabled = false;
 #endif
+
+	window->PointerPressed += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerPressed);
+	window->PointerReleased += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerReleased);
+	window->PointerMoved += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerMoved);
+
+	m_gestureRecognizer = ref new GestureRecognizer();
+	m_gestureRecognizer->GestureSettings = GestureSettings::Tap | GestureSettings::Drag | GestureSettings::DoubleTap | GestureSettings::Hold;
+	m_gestureRecognizer->Tapped += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::TappedEventArgs ^>(this, &SampleElements::App::OnTapped);
+	m_gestureRecognizer->Dragging += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::DraggingEventArgs ^>(this, &SampleElements::App::OnDragging);
+	m_gestureRecognizer->Holding += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::HoldingEventArgs ^>(this, &SampleElements::App::OnHolding);
 
 	m_deviceResources->SetWindow(window);
 }
@@ -145,7 +155,7 @@ void App::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
 
 	create_task([this, deferral]()
 	{
-        m_deviceResources->Trim();
+		m_deviceResources->Trim();
 
 		// Insert your code here.
 
@@ -189,7 +199,6 @@ void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 	m_deviceResources->ValidateDevice();
 }
 
-
 #if !(WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 void App::OnDpiChanged(DisplayInformation^ sender, Object^ args)
 {
@@ -203,3 +212,41 @@ void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 	m_main->CreateWindowSizeDependentResources();
 }
 #endif
+
+void App::OnPointerPressed(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
+{
+	m_gestureRecognizer->ProcessDownEvent(args->CurrentPoint);
+}
+
+void App::OnPointerReleased(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
+{
+	m_gestureRecognizer->ProcessUpEvent(args->CurrentPoint);
+}
+
+void App::OnPointerMoved(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
+{
+	m_gestureRecognizer->ProcessMoveEvents(args->GetIntermediatePoints());
+}
+
+void App::OnTapped(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::TappedEventArgs ^args)
+{
+	if (args->TapCount == 2) // double tap
+	{
+
+	}
+	else // single tap
+	{
+
+	}
+}
+
+
+void SampleElements::App::OnDragging(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::DraggingEventArgs ^args)
+{
+
+}
+
+
+void SampleElements::App::OnHolding(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::HoldingEventArgs ^args)
+{
+}

@@ -13,6 +13,7 @@ Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 
 void Sample2DSceneRenderer::Update(DX::StepTimer const& timer)
 {
+	
 	padding += 1.0f;
 }
 
@@ -121,8 +122,8 @@ void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
 HRESULT Sample2DSceneRenderer::LoadBitmapFromFile(PCWSTR uri, ID2D1Bitmap **ppBitmap)
 {
 	HRESULT hr;
-	auto context = m_deviceResources->GetD2DDeviceContext();
-	auto m_wicFactory = m_deviceResources->GetWicImagingFactory();
+	ID2D1DeviceContext1 *context = m_deviceResources->GetD2DDeviceContext();
+	IWICImagingFactory2 *m_wicFactory = m_deviceResources->GetWicImagingFactory();
 	Microsoft::WRL::ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
 
 	hr = m_wicFactory->CreateDecoderFromFilename(
@@ -138,7 +139,6 @@ HRESULT Sample2DSceneRenderer::LoadBitmapFromFile(PCWSTR uri, ID2D1Bitmap **ppBi
 	{
 		hr = wicBitmapDecoder->GetFrame(0, &wicBitmapFrame);
 	}
-
 
 	Microsoft::WRL::ComPtr<IWICFormatConverter> wicFormatConverter;
 
