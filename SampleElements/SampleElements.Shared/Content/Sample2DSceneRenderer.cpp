@@ -2,9 +2,10 @@
 #include "Sample2DSceneRenderer.h"
 
 #include "Common/DirectXHelper.h"
-#include "Common/PointerHelper.h"
+#include "Common/BitmapHelper.h"
 
 using namespace SampleElements;
+using namespace BitmapHelper;
 
 Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) : m_deviceResources(deviceResources)
 {
@@ -13,7 +14,7 @@ Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 
 void Sample2DSceneRenderer::Update(DX::StepTimer const& timer)
 {
-	
+
 	padding += 1.0f;
 }
 
@@ -107,9 +108,7 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 		)
 		);
 
-	DX::ThrowIfFailed(
-		LoadBitmapFromFile(L"Images/drop.png", &m_pBitmap)
-		);
+	DX::ThrowIfFailed(LoadBitmapFromFile(m_deviceResources.get(), L"Images/drop.png", &m_pBitmap));
 
 	padding = 0;
 }
@@ -119,73 +118,11 @@ void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
 	m_pBlueBrush.Reset();
 }
 
-HRESULT Sample2DSceneRenderer::LoadBitmapFromFile(PCWSTR uri, ID2D1Bitmap **ppBitmap)
-{
-	HRESULT hr;
-	ID2D1DeviceContext1 *context = m_deviceResources->GetD2DDeviceContext();
-	IWICImagingFactory2 *m_wicFactory = m_deviceResources->GetWicImagingFactory();
-	Microsoft::WRL::ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
-
-	hr = m_wicFactory->CreateDecoderFromFilename(
-		uri,
-		nullptr,
-		GENERIC_READ,
-		WICDecodeMetadataCacheOnDemand,
-		&wicBitmapDecoder
-		);
-
-	Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
-	if (SUCCEEDED(hr))
-	{
-		hr = wicBitmapDecoder->GetFrame(0, &wicBitmapFrame);
-	}
-
-	Microsoft::WRL::ComPtr<IWICFormatConverter> wicFormatConverter;
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_wicFactory->CreateFormatConverter(&wicFormatConverter);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		hr = wicFormatConverter->Initialize(
-			wicBitmapFrame.Get(),
-			GUID_WICPixelFormat32bppPBGRA,
-			WICBitmapDitherTypeNone,
-			nullptr,
-			0.0,
-			WICBitmapPaletteTypeCustom  // the BGRA format has no palette so this value is ignored
-			);
-	}
-
-	double dpiX = 96.0f;
-	double dpiY = 96.0f;
-	if (SUCCEEDED(hr))
-	{
-		hr = wicFormatConverter->GetResolution(&dpiX, &dpiY);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		hr = context->CreateBitmapFromWicBitmap(
-			wicFormatConverter.Get(),
-			D2D1::BitmapProperties(
-			D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
-			static_cast<float>(dpiX),
-			static_cast<float>(dpiY)
-			),
-			&m_pBitmap
-			);
-	}
-	return hr;
-}
-
 HRESULT Sample2DSceneRenderer::CreateBitmapBrush(PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush)
 {
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> ppBitmap;
 
-	auto hr = LoadBitmapFromFile(uri, &ppBitmap);
+	auto hr = LoadBitmapFromFile(m_deviceResources.get(), uri, &ppBitmap);
 	auto context = m_deviceResources->GetD2DDeviceContext();
 	hr = context->CreateBitmapBrush(ppBitmap.Get(), &m_pBitmapBrush);
 	return hr;

@@ -14,7 +14,6 @@ namespace SampleElements
 		void ReleaseDeviceDependentResources();
 		void Update(DX::StepTimer const& timer);
 		void Render();
-		HRESULT LoadBitmapFromFile(PCWSTR uri, ID2D1Bitmap **ppBitmap);
 		HRESULT CreateBitmapBrush(PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush);
 	private:
 		// Cached pointer to device resources.

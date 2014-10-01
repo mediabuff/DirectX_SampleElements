@@ -18,7 +18,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)app.h" />
     <ClCompile Include="$(MSBuildThisFileDirectory)app.cpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Common\PointerHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\BitmapHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SampleElementsMain.h" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SampleElementsMain.cpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />

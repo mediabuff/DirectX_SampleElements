@@ -22,7 +22,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Common\PointerHelper.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\BitmapHelper.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
