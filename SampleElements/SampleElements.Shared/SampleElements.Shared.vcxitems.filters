@@ -25,6 +25,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Common\BitmapHelper.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\InputManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)app.cpp" />
@@ -41,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Content\Sample2DSceneRenderer.cpp">
       <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Common\InputManager.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

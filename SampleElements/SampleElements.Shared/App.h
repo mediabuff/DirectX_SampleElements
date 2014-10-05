@@ -42,15 +42,8 @@ protected:
 	private:
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		std::unique_ptr<SampleElementsMain> m_main;
-		Platform::Agile<Windows::UI::Input::GestureRecognizer> m_gestureRecognizer;
 		bool m_windowClosed;
 		bool m_windowVisible;
-		void OnPointerPressed(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args);
-		void OnPointerReleased(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args);
-		void OnPointerMoved(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args);
-		void OnTapped(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::TappedEventArgs ^args);
-		void OnDragging(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::DraggingEventArgs ^args);
-		void OnHolding(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::HoldingEventArgs ^args);
 	};
 }
 

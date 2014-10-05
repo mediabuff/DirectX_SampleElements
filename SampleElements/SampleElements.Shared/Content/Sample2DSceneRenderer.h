@@ -1,7 +1,7 @@
 #pragma once
 
-#include "..\Common\DeviceResources.h"
-#include "..\Common\StepTimer.h"
+#include "Common\DeviceResources.h"
+#include "Common\StepTimer.h"
 
 namespace SampleElements
 {
@@ -22,6 +22,7 @@ namespace SampleElements
 		Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> m_pLinearGradientBrush;
 		Microsoft::WRL::ComPtr<ID2D1BitmapBrush> m_pBitmapBrush;
 		Microsoft::WRL::ComPtr<ID2D1Bitmap> m_pBitmap;
+
 		float padding;
 	};
 }

@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "App.h"
 
+#include "Common\InputManager.h"
+
 #include <ppltasks.h>
 
 using namespace SampleElements;
@@ -14,6 +16,8 @@ using namespace Windows::UI::Input;
 using namespace Windows::System;
 using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
+
+using namespace InputManager;
 
 // The main function is only used to initialize our IFrameworkView class.
 [Platform::MTAThread]
@@ -85,15 +89,7 @@ void App::SetWindow(CoreWindow^ window)
 	pointerVisualizationSettings->IsBarrelButtonFeedbackEnabled = false;
 #endif
 
-	window->PointerPressed += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerPressed);
-	window->PointerReleased += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerReleased);
-	window->PointerMoved += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^>(this, &SampleElements::App::OnPointerMoved);
-
-	m_gestureRecognizer = ref new GestureRecognizer();
-	m_gestureRecognizer->GestureSettings = GestureSettings::Tap | GestureSettings::Drag | GestureSettings::DoubleTap | GestureSettings::Hold;
-	m_gestureRecognizer->Tapped += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::TappedEventArgs ^>(this, &SampleElements::App::OnTapped);
-	m_gestureRecognizer->Dragging += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::DraggingEventArgs ^>(this, &SampleElements::App::OnDragging);
-	m_gestureRecognizer->Holding += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Input::GestureRecognizer ^, Windows::UI::Input::HoldingEventArgs ^>(this, &SampleElements::App::OnHolding);
+	m_inputManager->Initialize(window);
 
 	m_deviceResources->SetWindow(window);
 }
@@ -212,41 +208,3 @@ void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 	m_main->CreateWindowSizeDependentResources();
 }
 #endif
-
-void App::OnPointerPressed(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
-{
-	m_gestureRecognizer->ProcessDownEvent(args->CurrentPoint);
-}
-
-void App::OnPointerReleased(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
-{
-	m_gestureRecognizer->ProcessUpEvent(args->CurrentPoint);
-}
-
-void App::OnPointerMoved(Windows::UI::Core::CoreWindow ^sender, Windows::UI::Core::PointerEventArgs ^args)
-{
-	m_gestureRecognizer->ProcessMoveEvents(args->GetIntermediatePoints());
-}
-
-void App::OnTapped(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::TappedEventArgs ^args)
-{
-	if (args->TapCount == 2) // double tap
-	{
-
-	}
-	else // single tap
-	{
-
-	}
-}
-
-
-void SampleElements::App::OnDragging(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::DraggingEventArgs ^args)
-{
-
-}
-
-
-void SampleElements::App::OnHolding(Windows::UI::Input::GestureRecognizer ^sender, Windows::UI::Input::HoldingEventArgs ^args)
-{
-}
