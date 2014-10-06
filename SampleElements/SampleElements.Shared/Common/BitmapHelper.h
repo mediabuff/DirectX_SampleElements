@@ -69,4 +69,14 @@ namespace BitmapHelper
 		}
 		return hr;
 	}
+
+	inline HRESULT CreateBitmapBrush(DeviceResources *pDeviceResources, PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush)
+	{
+		Microsoft::WRL::ComPtr<ID2D1Bitmap> ppBitmap;
+
+		auto hr = LoadBitmapFromFile(pDeviceResources, uri, &ppBitmap);
+		auto context = pDeviceResources->GetD2DDeviceContext();
+		hr = context->CreateBitmapBrush(ppBitmap.Get(), ppBitmapBrush);
+		return hr;
+	}
 }

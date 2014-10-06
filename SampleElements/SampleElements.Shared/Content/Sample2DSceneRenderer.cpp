@@ -4,22 +4,23 @@
 #include "Common/DirectXHelper.h"
 #include "Common/BitmapHelper.h"
 
+using namespace DX;
 using namespace SampleElements;
 using namespace BitmapHelper;
 
-Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) : m_deviceResources(deviceResources)
+Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DeviceResources>& deviceResources) : SceneBase(deviceResources), m_deviceResources(deviceResources)
 {
 	CreateDeviceDependentResources();
 }
 
-void Sample2DSceneRenderer::Update(DX::StepTimer const& timer)
+void Sample2DSceneRenderer::Update(StepTimer const& timer)
 {
-
 	padding += 1.0f;
 }
 
 void Sample2DSceneRenderer::Render()
 {
+	SceneBase::Render();
 	ID2D1DeviceContext* context = m_deviceResources->GetD2DDeviceContext();
 
 	// Dash array for dashStyle D2D1_DASH_STYLE_CUSTOM
@@ -109,6 +110,7 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 		);
 
 	DX::ThrowIfFailed(LoadBitmapFromFile(m_deviceResources.get(), L"Images/drop.png", &m_pBitmap));
+	DX::ThrowIfFailed(LoadBitmapFromFile(m_deviceResources.get(), L"Images/bg.jpg", &m_pBackground));
 
 	padding = 0;
 }
@@ -116,14 +118,4 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
 {
 	m_pBlueBrush.Reset();
-}
-
-HRESULT Sample2DSceneRenderer::CreateBitmapBrush(PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush)
-{
-	Microsoft::WRL::ComPtr<ID2D1Bitmap> ppBitmap;
-
-	auto hr = LoadBitmapFromFile(m_deviceResources.get(), uri, &ppBitmap);
-	auto context = m_deviceResources->GetD2DDeviceContext();
-	hr = context->CreateBitmapBrush(ppBitmap.Get(), &m_pBitmapBrush);
-	return hr;
 }

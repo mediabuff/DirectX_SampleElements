@@ -17,9 +17,7 @@ SampleElementsMain::SampleElementsMain(const std::shared_ptr<DX::DeviceResources
 
 	// TODO: Replace this with your app's content initialization.
 	m_sceneRenderer = std::unique_ptr<Sample3DSceneRenderer>(new Sample3DSceneRenderer(m_deviceResources));
-
 	m_fpsTextRenderer = std::unique_ptr<SampleFpsTextRenderer>(new SampleFpsTextRenderer(m_deviceResources));
-
 	m_2dSceneRenderer = std::unique_ptr<Sample2DSceneRenderer>(new Sample2DSceneRenderer(m_deviceResources));
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
@@ -51,8 +49,8 @@ void SampleElementsMain::Update()
 	m_timer.Tick([&]()
 	{
 		// TODO: Replace this with your app's content update functions.
-		m_sceneRenderer->Update(m_timer);
-		m_fpsTextRenderer->Update(m_timer);
+		//m_sceneRenderer->Update(m_timer);
+		//m_fpsTextRenderer->Update(m_timer);
 		m_2dSceneRenderer->Update(m_timer);
 	});
 }
@@ -83,8 +81,8 @@ bool SampleElementsMain::Render()
 
 	// Render the scene objects.
 	// TODO: Replace this with your app's content rendering functions.
-	m_sceneRenderer->Render();
-	m_fpsTextRenderer->Render();
+	//m_sceneRenderer->Render();
+	//m_fpsTextRenderer->Render();
 	m_2dSceneRenderer->Render();
 
 	return true;

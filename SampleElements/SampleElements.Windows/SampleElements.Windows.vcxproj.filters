@@ -23,11 +23,19 @@
     <Image Include="Assets\SplashScreen.png">
       <Filter>Assets</Filter>
     </Image>
+    <Filter Include="Images">
+      <UniqueIdentifier>{d368f619-c55e-49f1-917a-e15a1496f4f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SampleElements.Windows_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\bg.jpg">
+      <Filter>Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

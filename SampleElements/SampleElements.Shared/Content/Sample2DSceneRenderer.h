@@ -2,19 +2,21 @@
 
 #include "Common\DeviceResources.h"
 #include "Common\StepTimer.h"
+#include "Common\SceneBase.h"
+
+using namespace Base;
 
 namespace SampleElements
 {
 	// Render 2D elements
-	class Sample2DSceneRenderer
+	class Sample2DSceneRenderer : SceneBase
 	{
 	public:
 		Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources);
-		void CreateDeviceDependentResources();
-		void ReleaseDeviceDependentResources();
-		void Update(DX::StepTimer const& timer);
-		void Render();
-		HRESULT CreateBitmapBrush(PCWSTR uri, ID2D1BitmapBrush **ppBitmapBrush);
+		virtual void CreateDeviceDependentResources();
+		virtual void ReleaseDeviceDependentResources();
+		virtual void Update(DX::StepTimer const& timer);
+		virtual void Render();
 	private:
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;

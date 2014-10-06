@@ -28,6 +28,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Common\InputManager.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Common\SceneBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)app.cpp" />
@@ -46,6 +49,9 @@
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Common\InputManager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Common\SceneBase.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
